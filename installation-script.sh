@@ -28,8 +28,7 @@ dockerfiles_repo_directory=docker-files
 # Final directory where the application data will be stored
 storage_directory=$containers_data_base_path/$installation_name/storage/$app_name
 # Path to the .env file
-checkout_env_file=$dockerfiles_directory/$dockerfiles_repo_directory/.env
-local_env_file=$dockerfiles_directory/.env
+env_file=$dockerfiles_directory/.env
 # Name of the variable in the .env file that needs to be updated with the correct storage directory path
 variable_name="POSTGRES_DB_VOLUME_BASE_PATH"
 
@@ -61,14 +60,14 @@ sudo -u $docker_user cp -r $checkout_directory/$dockerfiles_repo_directory/. $do
 # Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path
 echo "Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path"
 # Check if the variable exists in the .env file, if it does, update it, if not, add it
-if sudo -u $docker_user grep -q "${variable_name}=" "$local_env_file"; then
-    sudo -u $docker_user sed -i "s|^${variable_name}.*|${variable_name}=${storage_directory}|" "$local_env_file"
+if sudo -u $docker_user grep -q "${variable_name}=" "$env_file"; then
+    sudo -u $docker_user sed -i "s|^${variable_name}.*|${variable_name}=${storage_directory}|" "$env_file"
     echo "Updated ${variable_name} in .env file to ${storage_directory}"
 else
     echo "${variable_name} not found in .env file. Adding it."
     echo "${storage_directory}"
     # sudo -u $docker_user echo "${variable_name}=${storage_directory}" >> "$env_file"
-    echo "${variable_name}=${storage_directory}" | sudo -u $docker_user tee -a "$local_env_file" > /dev/null
+    echo "${variable_name}=${storage_directory}" | sudo -u $docker_user tee -a "$env_file" > /dev/null
 fi
 
 echo "Changing into directory $dockerfiles_directory and running docker compose commands"
