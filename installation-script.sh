@@ -79,3 +79,6 @@ docker compose up -d --build
 
 echo "Removing checkout directory: $checkout_directory"
 sudo -u $docker_user rm -rf $checkout_directory
+
+# Cleaning up git credentials cache
+git credential-cache exit
