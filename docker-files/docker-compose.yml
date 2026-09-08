@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     init: true
     container_name: postgres
-    user: ${POSTGRES_DB_USER}
+    user: dockertestusr
     environment:
       POSTGRES_USER: ${POSTGRES_DB_USER}
       POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
