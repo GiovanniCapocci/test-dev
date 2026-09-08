@@ -48,7 +48,7 @@ echo "Git clone completed"
 # Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path
 echo "Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path"
 # Check if the variable exists in the .env file, if it does, update it, if not, add it
-if [ grep -q "${variable_name}=" "$env_file"]; then
+if grep -q "${variable_name}=" "$env_file"; then
     sed -i "s|^${variable_name}.*|${variable_name}=${storage_directory}|" "$env_file"
     echo "Updated ${variable_name} in .env file to ${storage_directory}"
 else
@@ -76,4 +76,4 @@ docker compose -d --build
 
 
 echo "Removing checkout directory: $checkout_directory"
-sudo -u $docker_user -rm -rf $checkout_directory
+sudo -u $docker_user rm -rf $checkout_directory
