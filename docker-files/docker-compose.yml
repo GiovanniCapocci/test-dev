@@ -13,7 +13,7 @@ services:
     volumes:
       - ${POSTGRES_DB_VOLUME_BASE_PATH}:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-q", "-U ${POSTGRES_DB_USER} -d ${POSTGRES_DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -q -U ${POSTGRES_DB_USER} -d ${POSTGRES_DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
