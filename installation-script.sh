@@ -61,11 +61,12 @@ sudo -u $docker_user cp -r $checkout_directory/$dockerfiles_repo_directory/. $do
 # Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path
 echo "Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path"
 # Check if the variable exists in the .env file, if it does, update it, if not, add it
-if sudo -u $docker_user grep -q "${variable_name}=" "$checkout_env_file"; then
-    sudo -u $docker_user sed -i "s|^${variable_name}.*|${variable_name}=${storage_directory}|" "$checkout_env_file"
+if sudo -u $docker_user grep -q "${variable_name}=" "$local_env_file"; then
+    sudo -u $docker_user sed -i "s|^${variable_name}.*|${variable_name}=${storage_directory}|" "$local_env_file"
     echo "Updated ${variable_name} in .env file to ${storage_directory}"
 else
     echo "${variable_name} not found in .env file. Adding it."
+    echo "${storage_directory}"
     # sudo -u $docker_user echo "${variable_name}=${storage_directory}" >> "$env_file"
     echo "${variable_name}=${storage_directory}" | sudo -u $docker_user tee -a "$local_env_file" > /dev/null
 fi
