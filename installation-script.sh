@@ -36,9 +36,12 @@ dockerfiles_repo_directory=docker-files
 repo_url=https://github.com/GiovanniCapocci/test-dev.git
 
 echo "Making sure the checkout directory doesn't exist before cloning"
-sudo -u $docker_user -rm -rf $checkout_directory
+sudo -u $docker_user rm -rf $checkout_directory
 
 echo "Attempting git clone"
+
+
+
 sudo -u $docker_user git clone $repo_url $checkout_directory
 echo "Git clone completed"
 
