@@ -32,11 +32,14 @@ variable_name="POSTGRES_DB_VOLUME_BASE_PATH"
 # Name of directory where docker files are stored in the git repository
 dockerfiles_repo_directory=docker-files
 
+# Git repository URL
+repo_url=https://github.com/GiovanniCapocci/test-dev.git
+
 echo "Making sure the checkout directory doesn't exist before cloning"
 sudo -u $docker_user -rm -rf $checkout_directory
 
-echo "Attempting git login"
-sudo -u $docker_user git clone https://github.com/GiovanniCapocci/test-dev.git $checkout_directory
+echo "Attempting git clone"
+sudo -u $docker_user git clone $repo_url $checkout_directory
 echo "Git clone completed"
 
 # Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path
