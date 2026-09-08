@@ -1,0 +1,25 @@
+service:
+  postgres:
+    image: postgres:${POSTGRES_VERSION_TAG}
+    restart: unless-stopped
+    init: true
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_NAME}
+    ports:
+      - 0.0.0.0:${POSTGRES_DB_PORT}:5432
+    volumes:
+      - ${POSTGRES_DB_VOLUME_BASE_PATH}:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-q", "-U", "${POSTGRES_DB_USER}", "-d", "${POSTGRES_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - postgres_network
+
+networks:
+  postgres_network:
+    name: postgres_network
