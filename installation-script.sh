@@ -75,7 +75,7 @@ echo "Changing into directory $dockerfiles_directory and running docker compose 
 cd $dockerfiles_directory
 docker compose pull
 docker compose down
-docker compose -d --build
+docker compose up -d --build
 
 
 echo "Removing checkout directory: $checkout_directory"
