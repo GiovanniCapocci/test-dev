@@ -35,39 +35,37 @@ variable_name="POSTGRES_DB_VOLUME_BASE_PATH"
 # Git repository URL
 repo_url=https://github.com/GiovanniCapocci/test-dev.git
 
+echo "Running as: $(whoami)"
+
 echo "Making sure the checkout directory doesn't exist before cloning"
-sudo -u $docker_user rm -rf $checkout_directory
+rm -rf $checkout_directory
 
 echo "Attempting git clone"
-
-
-
-sudo -u $docker_user git clone $repo_url $checkout_directory
+git clone $repo_url $checkout_directory
 echo "Git clone completed"
 
 echo "Attempting to clone config files to: $dockerfiles_directory"
 if [ -d "$dockerfiles_directory" ]; then
     echo "Directory $dockerfiles_directory already exists. Removing it."
-    sudo -u $docker_user rm -r $dockerfiles_directory
+    rm -r $dockerfiles_directory
 fi
 
 echo "Creating directory $dockerfiles_directory"
-sudo -u $docker_user mkdir -p $dockerfiles_directory
+mkdir -p $dockerfiles_directory
 
 echo "Cloning config files..."
-sudo -u $docker_user cp -r $checkout_directory/$dockerfiles_repo_directory/. $dockerfiles_directory
+cp -r $checkout_directory/$dockerfiles_repo_directory/. $dockerfiles_directory
 
 # Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path
 echo "Updating .env POSTGRES_DB_VOLUME_BASE_PATH variable with the correct storage directory path"
 # Check if the variable exists in the .env file, if it does, update it, if not, add it
-if sudo -u $docker_user grep -q "${variable_name}=" "$env_file"; then
-    sudo -u $docker_user sed -i "s|^${variable_name}.*|${variable_name}=${storage_directory}|" "$env_file"
+if grep -q "${variable_name}=" "$env_file"; then
+    sed -i "s|^${variable_name}.*|${variable_name}=${storage_directory}|" "$env_file"
     echo "Updated ${variable_name} in .env file to ${storage_directory}"
 else
     echo "${variable_name} not found in .env file. Adding it."
     echo "${storage_directory}"
-    # sudo -u $docker_user echo "${variable_name}=${storage_directory}" >> "$env_file"
-    echo "${variable_name}=${storage_directory}" | sudo -u $docker_user tee -a "$env_file" > /dev/null
+    echo "${variable_name}=${storage_directory}" | tee -a "$env_file" > /dev/null
 fi
 
 echo "Changing into directory $dockerfiles_directory and running docker compose commands"
@@ -78,7 +76,7 @@ docker compose up -d --build
 
 
 echo "Removing checkout directory: $checkout_directory"
-sudo -u $docker_user rm -rf $checkout_directory
+rm -rf $checkout_directory
 
 # Cleaning up git credentials cache
 git credential-cache exit
